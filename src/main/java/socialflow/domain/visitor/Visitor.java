@@ -17,4 +17,6 @@ public interface Visitor<R> {
     R visitVideoMedia(VideoMedia videoMedia);
 
     R visitReaction(Reaction reaction);
+
+    R visitLinkMedia(LinkMedia linkMedia);
 }

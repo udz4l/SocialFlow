@@ -100,6 +100,16 @@ public class JsonExportVisitor implements Visitor<String> {
         ).trim();
     }
 
+    @Override
+    public String visitLinkMedia(LinkMedia linkMedia) {
+        return """
+                {"type":"link","url":"%s","description":"%s"}
+                """.formatted(
+                escape(linkMedia.url()),
+                escape(linkMedia.description())
+        ).trim();
+    }
+
     private String escape(String value) {
         return value
                 .replace("\\", "\\\\")

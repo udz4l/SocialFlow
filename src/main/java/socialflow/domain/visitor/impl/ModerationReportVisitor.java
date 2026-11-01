@@ -66,6 +66,14 @@ public class ModerationReportVisitor implements Visitor<ModerationReport> {
         return emptyReport();
     }
 
+    @Override
+    public ModerationReport visitLinkMedia(LinkMedia linkMedia) {
+        return checkText(
+                "Link description " + linkMedia.url(),
+                linkMedia.description()
+        );
+    }
+
     private ModerationReport checkText(String label, String text) {
         boolean flagged = blockedWords.stream()
                 .anyMatch(word -> text.toLowerCase()

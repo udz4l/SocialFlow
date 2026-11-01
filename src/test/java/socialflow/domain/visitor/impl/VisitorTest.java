@@ -152,4 +152,87 @@ class VisitorTest {
 
         assertTrue(json.contains("\"groups\": []"));
     }
+
+    @Test
+    void engagementVisitorShouldIgnoreLinkMedia() {
+        Post post = new Post(
+                "post-1",
+                "Alice",
+                "Check this link",
+                List.of(
+                        new LinkMedia(
+                                "https://example.com",
+                                "Interesting article"
+                        ),
+                        new Comment("c1", "Bob", "Nice")
+                )
+        );
+
+        assertEquals(1L, post.accept(new EngagementVisitor()));
+    }
+
+    @Test
+    void moderationVisitorShouldCheckLinkDescription() {
+        Post post = new Post(
+                "post-1",
+                "Alice",
+                "Normal post",
+                List.of(
+                        new LinkMedia(
+                                "https://example.com",
+                                "This is spam content"
+                        )
+                )
+        );
+
+        ModerationReport report = post.accept(
+                new ModerationReportVisitor(Set.of("spam"))
+        );
+
+        assertEquals(2, report.reviewedItems());
+        assertEquals(1, report.flaggedCount());
+    }
+
+    @Test
+    void contentFilterShouldFindLinkMedia() {
+        LinkMedia link = new LinkMedia(
+                "https://example.com/java",
+                "Java programming tutorial"
+        );
+
+        Post post = new Post(
+                "post-1",
+                "Alice",
+                "Check this resource",
+                List.of(link)
+        );
+
+        List<SocialElement> results = post.accept(
+                new ContentFilterVisitor("tutorial")
+        );
+
+        assertEquals(1, results.size());
+        assertEquals(link, results.getFirst());
+    }
+
+    @Test
+    void jsonExportShouldIncludeLinkMedia() {
+        LinkMedia link = new LinkMedia(
+                "https://example.com",
+                "Useful resource"
+        );
+
+        Post post = new Post(
+                "post-1",
+                "Alice",
+                "Check this link",
+                List.of(link)
+        );
+
+        String json = post.accept(new JsonExportVisitor());
+
+        assertTrue(json.contains("\"type\":\"link\""));
+        assertTrue(json.contains("https://example.com"));
+        assertTrue(json.contains("Useful resource"));
+    }
 }

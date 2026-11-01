@@ -75,4 +75,17 @@ public class ContentFilterVisitor implements Visitor<List<SocialElement>> {
     public List<SocialElement> visitReaction(Reaction reaction) {
         return List.of();
     }
+
+    @Override
+    public List<SocialElement> visitLinkMedia(LinkMedia linkMedia) {
+        String searchableText = (
+                linkMedia.url() + " " + linkMedia.description()
+        ).toLowerCase(Locale.ROOT);
+
+        if (searchableText.contains(keyword)) {
+            return List.of(linkMedia);
+        }
+
+        return List.of();
+    }
 }

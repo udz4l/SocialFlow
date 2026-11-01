@@ -45,4 +45,9 @@ public class EngagementVisitor implements Visitor<Long> {
     public Long visitReaction(Reaction reaction) {
         return 1L;
     }
+
+    @Override
+    public Long visitLinkMedia(LinkMedia linkMedia) {
+        return 0L;
+    }
 }

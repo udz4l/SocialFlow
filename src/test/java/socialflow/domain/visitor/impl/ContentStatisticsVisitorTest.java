@@ -23,11 +23,16 @@ class ContentStatisticsVisitorTest {
                 ReactionType.LIKE
         );
 
+        LinkMedia link = new LinkMedia(
+                "https://example.com",
+                "Useful resource"
+        );
+
         Post post = new Post(
                 "post-1",
                 "Alice",
                 "Hello world",
-                List.of(comment, reaction)
+                List.of(comment, reaction, link)
         );
 
         Group group = new Group(
@@ -50,5 +55,6 @@ class ContentStatisticsVisitorTest {
         assertEquals(1L, statistics.get("Post"));
         assertEquals(1L, statistics.get("Comment"));
         assertEquals(1L, statistics.get("Reaction"));
+        assertEquals(1L, statistics.get("LinkMedia"));
     }
 }

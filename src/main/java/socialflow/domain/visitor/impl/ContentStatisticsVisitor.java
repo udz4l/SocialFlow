@@ -44,6 +44,11 @@ public class ContentStatisticsVisitor implements Visitor<Map<String, Long>> {
         return count("Reaction", reaction.children());
     }
 
+    @Override
+    public Map<String, Long> visitLinkMedia(LinkMedia linkMedia) {
+        return count("LinkMedia", linkMedia.children());
+    }
+
     private Map<String, Long> count(
             String elementType,
             List<? extends SocialElement> children
